@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { Calculator, Clock, Zap, Skull, DivideSquare, PieChart, Ruler, BarChart2, PlusMinus, Percent, Variable, Circle } from 'lucide-react';
+import { Calculator, Clock, Zap, Skull, DivideSquare, PieChart, Ruler, BarChart2, Hash, Percent, Variable, Circle } from 'lucide-react';
 import { useContext } from 'react';
 import { GameContext } from '../context/GameContext';
 
@@ -59,7 +59,7 @@ export default function Home() {
       <h2 style={{marginTop: '3rem', borderBottom: '2px solid rgba(255,255,255,0.5)', paddingBottom: '10px', color: 'var(--text-dark)'}}>Middle School (Classes 6-7)</h2>
       <div className="card-grid" style={{marginBottom: '3rem'}}>
         <Link to="/middle-integers" className="glass-panel game-card">
-          <PlusMinus className="icon" style={{color: '#9b59b6'}} />
+          <Hash className="icon" style={{color: '#9b59b6'}} />
           <h2>Integers</h2>
         </Link>
         <Link to="/middle-ratio" className="glass-panel game-card">
