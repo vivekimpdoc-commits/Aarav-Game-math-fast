@@ -20,10 +20,6 @@ export default function Home() {
       
       <h1 className="title">Math Master</h1>
       <div className="card-grid">
-        <Link to="/numbers" className="glass-panel game-card">
-          <Hash className="icon" />
-          <h2>Numbers & Place Value</h2>
-        </Link>
         <Link to="/operations" className="glass-panel game-card">
           <Calculator className="icon" />
           <h2>Operations</h2>
@@ -31,10 +27,6 @@ export default function Home() {
         <Link to="/time-money" className="glass-panel game-card">
           <Clock className="icon" />
           <h2>Time & Money</h2>
-        </Link>
-        <Link to="/shapes" className="glass-panel game-card">
-          <Shapes className="icon" />
-          <h2>Shapes & Space</h2>
         </Link>
         <Link to="/boss" className="glass-panel game-card" style={{border: '2px solid var(--primary)', background: '#ffebeb'}}>
           <Zap className="icon" style={{color: 'var(--primary)'}} />

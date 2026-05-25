@@ -1,9 +1,7 @@
 import { Routes, Route } from 'react-router-dom';
 import Home from './components/Home';
-import NumbersGame from './components/NumbersGame';
 import OperationsGame from './components/OperationsGame';
 import TimeMoneyGame from './components/TimeMoneyGame';
-import ShapesGame from './components/ShapesGame';
 import BossGame from './components/BossGame';
 import GeniusGame from './components/GeniusGame';
 import { GameProvider, GameContext } from './context/GameContext';
@@ -30,10 +28,8 @@ function App() {
         <LevelUpModal />
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route path="/numbers" element={<NumbersGame />} />
           <Route path="/operations" element={<OperationsGame />} />
           <Route path="/time-money" element={<TimeMoneyGame />} />
-          <Route path="/shapes" element={<ShapesGame />} />
           <Route path="/boss" element={<BossGame />} />
           <Route path="/genius" element={<GeniusGame />} />
         </Routes>

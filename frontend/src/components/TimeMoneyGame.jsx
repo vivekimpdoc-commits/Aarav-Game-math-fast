@@ -11,13 +11,13 @@ export default function TimeMoneyGame() {
   const [feedback, setFeedback] = useState(null);
 
   const generateQuestion = () => {
-    let coinTypes = [1];
+    let coinTypes = [1, 2];
     let maxCoins = 3;
 
-    if (level > 4) { coinTypes = [1, 5]; maxCoins = 4; }
-    if (level > 9) { coinTypes = [1, 5, 10]; maxCoins = 5; }
-    if (level > 15) { coinTypes = [5, 10, 25]; maxCoins = 6; }
-    if (level > 20) { coinTypes = [10, 25, 50]; maxCoins = 8; }
+    if (level > 4) { coinTypes = [1, 2, 5]; maxCoins = 4; }
+    if (level > 9) { coinTypes = [1, 2, 5, 10]; maxCoins = 5; }
+    if (level > 15) { coinTypes = [5, 10, 20, 50]; maxCoins = 5; }
+    if (level > 20) { coinTypes = [10, 20, 50, 100]; maxCoins = 6; }
 
     const numCoins = Math.floor(Math.random() * maxCoins) + 2;
     
@@ -73,8 +73,8 @@ export default function TimeMoneyGame() {
       
       <div className="visual-area">
         {coins.map((c, i) => (
-          <div key={i} className="coin">
-             {c === 50 ? '50¢' : c === 25 ? '25¢' : c === 10 ? '10¢' : c === 5 ? '5¢' : '1¢'}
+          <div key={i} className="coin" style={c >= 20 ? {borderRadius: '5px', width: '90px', height: '50px', background: c===100?'#673ab7':c===50?'#009688':'#ff9800', border: '2px solid white', color: 'white'} : {}}>
+             ₹{c}
           </div>
         ))}
       </div>
@@ -82,7 +82,7 @@ export default function TimeMoneyGame() {
       <div className="options-grid">
         {options.map((opt, i) => (
           <button key={i} className="option-btn" onClick={() => handleAnswer(opt)}>
-            {opt}¢
+            ₹{opt}
           </button>
         ))}
       </div>

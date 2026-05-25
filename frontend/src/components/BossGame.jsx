@@ -35,7 +35,7 @@ export default function BossGame() {
   }, [isPlaying, timeLeft]);
 
   const generateMixedQuestion = () => {
-    const types = ['operations', 'numbers', 'shapes'];
+    const types = ['operations'];
     const type = types[Math.floor(Math.random() * types.length)];
     
     let maxNum = level > 10 ? 50 : 20;
@@ -137,11 +137,6 @@ export default function BossGame() {
       
       <h2 className="title" style={{marginTop: '2rem', fontSize: '2rem'}}>🔥 Boss Mode 🔥</h2>
       
-      {currentQuestion && currentQuestion.type === 'shape' && (
-        <div className="visual-area" style={{ height: '100px', alignItems: 'center' }}>
-          <div style={currentQuestion.style}></div>
-        </div>
-      )}
       <div className="question-text">{currentQuestion?.text}</div>
       
       <div className="options-grid">
