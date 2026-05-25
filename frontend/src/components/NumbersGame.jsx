@@ -76,4 +76,18 @@ export default function NumbersGame() {
       <div className="options-grid">
         {options.map((opt, i) => (
           <button key={i} className="option-btn" onClick={() => handleAnswer(opt)}>
-         
+            {opt}
+          </button>
+        ))}
+      </div>
+
+      {feedback && (
+        <div className="feedback-overlay">
+          <h1 className={feedback === 'correct' ? 'success-text' : 'error-text'}>
+            {feedback === 'correct' ? 'Awesome! 🌟 +10 XP' : 'Try Again! ❌'}
+          </h1>
+        </div>
+      )}
+    </div>
+  );
+}

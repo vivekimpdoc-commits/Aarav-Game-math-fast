@@ -80,4 +80,20 @@ export default function TimeMoneyGame() {
       </div>
       
       <div className="options-grid">
-        {options.ma
+        {options.map((opt, i) => (
+          <button key={i} className="option-btn" onClick={() => handleAnswer(opt)}>
+            {opt}¢
+          </button>
+        ))}
+      </div>
+
+      {feedback && (
+        <div className="feedback-overlay">
+          <h1 className={feedback === 'correct' ? 'success-text' : 'error-text'}>
+            {feedback === 'correct' ? 'Cha-Ching! 💰 +10 XP' : 'Oops! ❌'}
+          </h1>
+        </div>
+      )}
+    </div>
+  );
+}

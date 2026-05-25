@@ -67,4 +67,29 @@ export default function ShapesGame() {
       </button>
       <div className="score-display">Level {level}</div>
       
-      <h2 className="title">Shape Uni
+      <h2 className="title">Shape Universe</h2>
+      
+      <div className="question-text">What shape is this?</div>
+      
+      <div className="visual-area" style={{ height: '150px', alignItems: 'center' }}>
+        <div style={currentShape.style}></div>
+      </div>
+      
+      <div className="options-grid">
+        {options.map((opt, i) => (
+          <button key={i} className="option-btn" onClick={() => handleAnswer(opt)}>
+            {opt}
+          </button>
+        ))}
+      </div>
+
+      {feedback && (
+        <div className="feedback-overlay">
+          <h1 className={feedback === 'correct' ? 'success-text' : 'error-text'}>
+            {feedback === 'correct' ? 'Super Shape! 🔶 +10 XP' : 'Try Again! ❌'}
+          </h1>
+        </div>
+      )}
+    </div>
+  );
+}

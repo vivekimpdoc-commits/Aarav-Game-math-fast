@@ -15,4 +15,29 @@ function LevelUpModal() {
   
   return (
     <div className="feedback-overlay" style={{background: 'rgba(255,230,109,0.95)'}}>
-     
+      <h1 className="success-text" style={{fontSize: '4rem', textAlign: 'center'}}>
+        🎉 LEVEL UP! 🎉<br/>You reached Level {level}!
+      </h1>
+    </div>
+  );
+}
+
+function App() {
+  return (
+    <GameProvider>
+      <div className="app-container">
+        <LevelUpModal />
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/numbers" element={<NumbersGame />} />
+          <Route path="/operations" element={<OperationsGame />} />
+          <Route path="/time-money" element={<TimeMoneyGame />} />
+          <Route path="/shapes" element={<ShapesGame />} />
+          <Route path="/boss" element={<BossGame />} />
+        </Routes>
+      </div>
+    </GameProvider>
+  );
+}
+
+export default App;

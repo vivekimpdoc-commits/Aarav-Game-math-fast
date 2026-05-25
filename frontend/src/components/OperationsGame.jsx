@@ -97,4 +97,13 @@ export default function OperationsGame() {
         ))}
       </div>
 
-   
+      {feedback && (
+        <div className="feedback-overlay">
+          <h1 className={feedback === 'correct' ? 'success-text' : 'error-text'}>
+            {feedback === 'correct' ? 'Great Job! 🍎 +10 XP' : 'Oops! ❌'}
+          </h1>
+        </div>
+      )}
+    </div>
+  );
+}
