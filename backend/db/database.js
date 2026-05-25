@@ -17,6 +17,15 @@ const db = new sqlite3.Database(dbPath, (err) => {
             score INTEGER,
             timestamp DATETIME DEFAULT CURRENT_TIMESTAMP
         )`);
+
+        db.run(`CREATE TABLE IF NOT EXISTS users (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            username TEXT UNIQUE,
+            password TEXT,
+            level INTEGER DEFAULT 1,
+            xp INTEGER DEFAULT 0,
+            timestamp DATETIME DEFAULT CURRENT_TIMESTAMP
+        )`);
     }
 });
 
