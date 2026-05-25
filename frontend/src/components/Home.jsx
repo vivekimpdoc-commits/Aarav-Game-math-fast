@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { Hash, Calculator, Clock, Shapes, Zap, Skull } from 'lucide-react';
+import { Calculator, Clock, Zap, Skull, DivideSquare, PieChart, Ruler, BarChart2 } from 'lucide-react';
 import { useContext } from 'react';
 import { GameContext } from '../context/GameContext';
 
@@ -27,6 +27,22 @@ export default function Home() {
         <Link to="/time-money" className="glass-panel game-card">
           <Clock className="icon" />
           <h2>Time & Money</h2>
+        </Link>
+        <Link to="/advanced-ops" className="glass-panel game-card">
+          <DivideSquare className="icon" style={{color: '#3498db'}} />
+          <h2>Advanced Ops</h2>
+        </Link>
+        <Link to="/fractions" className="glass-panel game-card">
+          <PieChart className="icon" style={{color: '#e67e22'}} />
+          <h2>Fractions & Decimals</h2>
+        </Link>
+        <Link to="/measurement" className="glass-panel game-card">
+          <Ruler className="icon" style={{color: '#27ae60'}} />
+          <h2>Measurement</h2>
+        </Link>
+        <Link to="/data" className="glass-panel game-card">
+          <BarChart2 className="icon" style={{color: '#e74c3c'}} />
+          <h2>Data Analysis</h2>
         </Link>
         <Link to="/boss" className="glass-panel game-card" style={{border: '2px solid var(--primary)', background: '#ffebeb'}}>
           <Zap className="icon" style={{color: 'var(--primary)'}} />

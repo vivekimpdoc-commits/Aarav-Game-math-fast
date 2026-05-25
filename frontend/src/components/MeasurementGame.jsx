@@ -1,0 +1,74 @@
+import { useState, useEffect, useContext } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { ArrowLeft } from 'lucide-react';
+import { GameContext } from '../context/GameContext';
+
+export default function MeasurementGame() {
+  const navigate = useNavigate();
+  const { level, addXp } = useContext(GameContext);
+  const [question, setQuestion] = useState(null);
+  const [options, setOptions] = useState([]);
+  const [feedback, setFeedback] = useState(null);
+
+  const generateQuestion = () => {
+    const types = ['convert', 'area', 'perimeter'];
+    const type = types[Math.floor(Math.random() * types.length)];
+    let text = ''; let correct = '';
+    
+    if (type === 'convert') {
+      const val = Math.floor(Math.random() * 10) + 1;
+      const isCm = Math.random() > 0.5;
+      if (isCm) {
+         correct = val * 100; text = `${val} meters = ? cm`;
+      } else {
+         correct = val * 1000; text = `${val} kg = ? grams`;
+      }
+      const newOps = [correct, correct*10, correct/10, correct+100].sort(() => Math.random() - 0.5);
+      setOptions([...new Set(newOps)].slice(0, 4));
+    } else {
+      const w = Math.floor(Math.random() * 10) + 2;
+      const h = Math.floor(Math.random() * 10) + 2;
+      if (type === 'area') {
+        correct = w * h; text = `Area of a ${w}x${h} rectangle?`;
+      } else {
+        correct = 2 * (w + h); text = `Perimeter of a ${w}x${h} rectangle?`;
+      }
+      const newOps = [correct, correct+2, correct-2, w*h + 2*(w+h)].sort(() => Math.random() - 0.5);
+      setOptions([...new Set(newOps)].slice(0, 4));
+    }
+    setQuestion({ text, correct: correct.toString() });
+  };
+
+  useEffect(() => { generateQuestion(); }, [level]);
+
+  const handleAnswer = (opt) => {
+    if (opt.toString() === question.correct) {
+      setFeedback('correct'); addXp(15);
+      setTimeout(() => { setFeedback(null); generateQuestion(); }, 1000);
+    } else {
+      setFeedback('incorrect');
+      setTimeout(() => setFeedback(null), 1000);
+    }
+  };
+
+  return (
+    <div className="game-container glass-panel">
+      <button className="back-btn" onClick={() => navigate('/')}><ArrowLeft /></button>
+      <div className="score-display">Level {level}</div>
+      <h2 className="title">Measurement & Geometry</h2>
+      <div className="question-text" style={{fontSize: '3rem'}}>{question?.text}</div>
+      <div className="options-grid">
+        {options.map((opt, i) => (
+          <button key={i} className="option-btn" onClick={() => handleAnswer(opt)}>{opt}</button>
+        ))}
+      </div>
+      {feedback && (
+        <div className="feedback-overlay">
+          <h1 className={feedback === 'correct' ? 'success-text' : 'error-text'}>
+            {feedback === 'correct' ? 'Measured Perfectly! 📏 +15 XP' : 'Oops! ❌'}
+          </h1>
+        </div>
+      )}
+    </div>
+  );
+}
