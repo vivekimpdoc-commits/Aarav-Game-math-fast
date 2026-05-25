@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { Hash, Calculator, Clock, Shapes, Zap } from 'lucide-react';
+import { Hash, Calculator, Clock, Shapes, Zap, Skull } from 'lucide-react';
 import { useContext } from 'react';
 import { GameContext } from '../context/GameContext';
 
@@ -39,6 +39,10 @@ export default function Home() {
         <Link to="/boss" className="glass-panel game-card" style={{border: '2px solid var(--primary)', background: '#ffebeb'}}>
           <Zap className="icon" style={{color: 'var(--primary)'}} />
           <h2>🔥 Boss Mode 🔥</h2>
+        </Link>
+        <Link to="/genius" className="glass-panel game-card" style={{border: '3px solid #8e44ad', background: '#f5eef8'}}>
+          <Skull className="icon" style={{color: '#8e44ad'}} />
+          <h2 style={{color: '#8e44ad'}}>Genius Survival</h2>
         </Link>
       </div>
     </div>

@@ -5,6 +5,7 @@ import OperationsGame from './components/OperationsGame';
 import TimeMoneyGame from './components/TimeMoneyGame';
 import ShapesGame from './components/ShapesGame';
 import BossGame from './components/BossGame';
+import GeniusGame from './components/GeniusGame';
 import { GameProvider, GameContext } from './context/GameContext';
 import { useContext } from 'react';
 
@@ -34,6 +35,7 @@ function App() {
           <Route path="/time-money" element={<TimeMoneyGame />} />
           <Route path="/shapes" element={<ShapesGame />} />
           <Route path="/boss" element={<BossGame />} />
+          <Route path="/genius" element={<GeniusGame />} />
         </Routes>
       </div>
     </GameProvider>
