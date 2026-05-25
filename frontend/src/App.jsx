@@ -12,6 +12,7 @@ import MiddleIntegersGame from './components/MiddleIntegersGame';
 import MiddleRatioGame from './components/MiddleRatioGame';
 import MiddleAlgebraGame from './components/MiddleAlgebraGame';
 import MiddleGeometryGame from './components/MiddleGeometryGame';
+import LogicPuzzleGame from './components/LogicPuzzleGame';
 import { GameProvider, GameContext } from './context/GameContext';
 import { useContext } from 'react';
 
@@ -42,6 +43,7 @@ function App() {
           <Route path="/fractions" element={<FractionsGame />} />
           <Route path="/measurement" element={<MeasurementGame />} />
           <Route path="/data" element={<DataGame />} />
+          <Route path="/logic" element={<LogicPuzzleGame />} />
           <Route path="/boss" element={<BossGame />} />
           <Route path="/genius" element={<GeniusGame />} />
           <Route path="/middle-integers" element={<MiddleIntegersGame />} />
