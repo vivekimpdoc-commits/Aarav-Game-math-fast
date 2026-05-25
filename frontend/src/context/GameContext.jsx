@@ -16,6 +16,21 @@ export function GameProvider({ children }) {
   // Load and validate user session on mount
   useEffect(() => {
     if (token) {
+      if (token.startsWith('demo_')) {
+        const localUser = JSON.parse(localStorage.getItem('math_demo_user') || 'null');
+        if (localUser) {
+          setUser(localUser);
+          setLevel(localUser.level || 1);
+          setXp(localUser.xp || 0);
+        } else {
+          setToken(null);
+          setUser(null);
+          localStorage.removeItem('math_token');
+        }
+        setLoading(false);
+        return;
+      }
+
       fetch('http://localhost:5000/api/auth/me', {
         headers: {
           'Authorization': `Bearer ${token}`
@@ -35,10 +50,23 @@ export function GameProvider({ children }) {
       })
       .catch(err => {
         console.warn("Auth validation error:", err.message);
-        // Reset local token
-        setToken(null);
-        setUser(null);
-        localStorage.removeItem('math_token');
+        // Fallback to local storage demo session if network error
+        if (err.message.includes('Failed to fetch') || err.message.includes('NetworkError') || err.message === 'Failed to fetch') {
+          const localUser = JSON.parse(localStorage.getItem('math_demo_user') || 'null');
+          if (localUser) {
+            setUser(localUser);
+            setLevel(localUser.level || 1);
+            setXp(localUser.xp || 0);
+          } else {
+            setToken(null);
+            setUser(null);
+            localStorage.removeItem('math_token');
+          }
+        } else {
+          setToken(null);
+          setUser(null);
+          localStorage.removeItem('math_token');
+        }
         setLoading(false);
       });
     } else {
@@ -48,53 +76,105 @@ export function GameProvider({ children }) {
 
   // Register action
   const register = async (username, password) => {
-    const res = await fetch('http://localhost:5000/api/auth/register', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({ username, password })
-    });
-    
-    const data = await res.json();
-    if (!res.ok) {
-      throw new Error(data.error || 'Failed to register');
+    try {
+      const res = await fetch('http://localhost:5000/api/auth/register', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ username, password })
+      });
+      
+      const data = await res.json();
+      if (!res.ok) {
+        throw new Error(data.error || 'Failed to register');
+      }
+      
+      setToken(data.token);
+      setUser(data.user);
+      setLevel(data.user.level);
+      setXp(data.user.xp);
+      localStorage.setItem('math_token', data.token);
+      localStorage.setItem('math_demo_user', JSON.stringify(data.user));
+      return data.user;
+    } catch (err) {
+      if (err.message.includes('Failed to fetch') || err.message.includes('NetworkError') || err.message === 'Failed to fetch') {
+        // Run in local demo mode!
+        const users = JSON.parse(localStorage.getItem('math_demo_users') || '{}');
+        const trimmed = username.trim();
+        if (users[trimmed.toLowerCase()]) {
+          throw new Error('Username is already taken (Demo Mode)');
+        }
+        const newUser = { username: trimmed, level: 1, xp: 0 };
+        users[trimmed.toLowerCase()] = { username: trimmed, password, level: 1, xp: 0 };
+        localStorage.setItem('math_demo_users', JSON.stringify(users));
+        
+        const demoToken = 'demo_' + Math.random().toString(36).substr(2, 9);
+        setToken(demoToken);
+        setUser(newUser);
+        setLevel(1);
+        setXp(0);
+        localStorage.setItem('math_token', demoToken);
+        localStorage.setItem('math_demo_user', JSON.stringify(newUser));
+        return newUser;
+      }
+      throw err;
     }
-    
-    setToken(data.token);
-    setUser(data.user);
-    setLevel(data.user.level);
-    setXp(data.user.xp);
-    localStorage.setItem('math_token', data.token);
-    return data.user;
   };
 
   // Login action
   const login = async (username, password) => {
-    const res = await fetch('http://localhost:5000/api/auth/login', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({ username, password })
-    });
-    
-    const data = await res.json();
-    if (!res.ok) {
-      throw new Error(data.error || 'Failed to login');
+    try {
+      const res = await fetch('http://localhost:5000/api/auth/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ username, password })
+      });
+      
+      const data = await res.json();
+      if (!res.ok) {
+        throw new Error(data.error || 'Failed to login');
+      }
+      
+      setToken(data.token);
+      setUser(data.user);
+      setLevel(data.user.level);
+      setXp(data.user.xp);
+      localStorage.setItem('math_token', data.token);
+      localStorage.setItem('math_demo_user', JSON.stringify(data.user));
+      return data.user;
+    } catch (err) {
+      if (err.message.includes('Failed to fetch') || err.message.includes('NetworkError') || err.message === 'Failed to fetch') {
+        // Run in local demo mode!
+        const users = JSON.parse(localStorage.getItem('math_demo_users') || '{}');
+        const trimmed = username.trim();
+        const existing = users[trimmed.toLowerCase()];
+        if (!existing) {
+          throw new Error('User does not exist (Demo Mode)');
+        }
+        if (existing.password !== password) {
+          throw new Error('Incorrect password (Demo Mode)');
+        }
+        
+        const demoToken = 'demo_' + Math.random().toString(36).substr(2, 9);
+        const loggedUser = { username: existing.username, level: existing.level, xp: existing.xp };
+        setToken(demoToken);
+        setUser(loggedUser);
+        setLevel(existing.level);
+        setXp(existing.xp);
+        localStorage.setItem('math_token', demoToken);
+        localStorage.setItem('math_demo_user', JSON.stringify(loggedUser));
+        return loggedUser;
+      }
+      throw err;
     }
-    
-    setToken(data.token);
-    setUser(data.user);
-    setLevel(data.user.level);
-    setXp(data.user.xp);
-    localStorage.setItem('math_token', data.token);
-    return data.user;
   };
 
   // Logout action
   const logout = () => {
-    if (token) {
+    if (token && !token.startsWith('demo_')) {
       fetch('http://localhost:5000/api/auth/logout', {
         method: 'POST',
         headers: {
@@ -107,6 +187,7 @@ export function GameProvider({ children }) {
     setLevel(1);
     setXp(0);
     localStorage.removeItem('math_token');
+    localStorage.removeItem('math_demo_user');
   };
 
   // Synced addXp
@@ -127,6 +208,27 @@ export function GameProvider({ children }) {
       
       // Update level and XP in the database if logged in
       if (token) {
+        if (token.startsWith('demo_')) {
+          // Local storage demo mode progress sync
+          const users = JSON.parse(localStorage.getItem('math_demo_users') || '{}');
+          const localUser = JSON.parse(localStorage.getItem('math_demo_user') || 'null');
+          if (localUser) {
+            localUser.level = newLevel;
+            localUser.xp = newXp;
+            localStorage.setItem('math_demo_user', JSON.stringify(localUser));
+            
+            if (users[localUser.username.toLowerCase()]) {
+              users[localUser.username.toLowerCase()].level = newLevel;
+              users[localUser.username.toLowerCase()].xp = newXp;
+              localStorage.setItem('math_demo_users', JSON.stringify(users));
+            }
+            
+            setUser(localUser);
+          }
+          return newXp;
+        }
+
+        // Live server progress sync
         fetch('http://localhost:5000/api/auth/progress', {
           method: 'POST',
           headers: {
@@ -139,15 +241,21 @@ export function GameProvider({ children }) {
           if (res.ok) {
             setUser(prevUser => {
               if (!prevUser) return null;
-              return {
-                ...prevUser,
-                level: newLevel,
-                xp: newXp
-              };
+              const updated = { ...prevUser, level: newLevel, xp: newXp };
+              localStorage.setItem('math_demo_user', JSON.stringify(updated));
+              return updated;
             });
           }
         })
-        .catch(err => console.error("Could not sync progression with server:", err));
+        .catch(err => {
+          console.warn("Could not sync progression with server, updating locally:", err);
+          setUser(prevUser => {
+            if (!prevUser) return null;
+            const updated = { ...prevUser, level: newLevel, xp: newXp };
+            localStorage.setItem('math_demo_user', JSON.stringify(updated));
+            return updated;
+          });
+        });
       }
       
       return newXp;
