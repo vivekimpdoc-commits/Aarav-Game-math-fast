@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { Calculator, Clock, Zap, Skull, DivideSquare, PieChart, Ruler, BarChart2 } from 'lucide-react';
+import { Calculator, Clock, Zap, Skull, DivideSquare, PieChart, Ruler, BarChart2, PlusMinus, Percent, Variable, Circle } from 'lucide-react';
 import { useContext } from 'react';
 import { GameContext } from '../context/GameContext';
 
@@ -19,6 +19,8 @@ export default function Home() {
       </div>
       
       <h1 className="title">Math Master</h1>
+      
+      <h2 style={{marginTop: '2rem', borderBottom: '2px solid rgba(255,255,255,0.5)', paddingBottom: '10px', color: 'var(--text-dark)'}}>Primary School (Classes 1-5)</h2>
       <div className="card-grid">
         <Link to="/operations" className="glass-panel game-card">
           <Calculator className="icon" />
@@ -51,6 +53,26 @@ export default function Home() {
         <Link to="/genius" className="glass-panel game-card" style={{border: '3px solid #8e44ad', background: '#f5eef8'}}>
           <Skull className="icon" style={{color: '#8e44ad'}} />
           <h2 style={{color: '#8e44ad'}}>Genius Survival</h2>
+        </Link>
+      </div>
+
+      <h2 style={{marginTop: '3rem', borderBottom: '2px solid rgba(255,255,255,0.5)', paddingBottom: '10px', color: 'var(--text-dark)'}}>Middle School (Classes 6-7)</h2>
+      <div className="card-grid" style={{marginBottom: '3rem'}}>
+        <Link to="/middle-integers" className="glass-panel game-card">
+          <PlusMinus className="icon" style={{color: '#9b59b6'}} />
+          <h2>Integers</h2>
+        </Link>
+        <Link to="/middle-ratio" className="glass-panel game-card">
+          <Percent className="icon" style={{color: '#1abc9c'}} />
+          <h2>Ratio & Percentage</h2>
+        </Link>
+        <Link to="/middle-algebra" className="glass-panel game-card">
+          <Variable className="icon" style={{color: '#f1c40f'}} />
+          <h2>Algebra</h2>
+        </Link>
+        <Link to="/middle-geometry" className="glass-panel game-card">
+          <Circle className="icon" style={{color: '#e84393'}} />
+          <h2>Geometry</h2>
         </Link>
       </div>
     </div>
