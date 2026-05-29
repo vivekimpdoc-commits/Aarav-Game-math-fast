@@ -41,6 +41,13 @@ jobs:
           cd frontend
           npm run build
 
+      - name: Create fallback folder for /frontend/index.html
+        run: |
+          cd frontend
+          mkdir -p dist/frontend
+          cp dist/index.html dist/frontend/
+          cp -r dist/assets dist/frontend/
+
       - name: Setup Pages
         uses: actions/configure-pages@v5
 
