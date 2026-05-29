@@ -1,4 +1,4 @@
-import { useState, useContext } from 'react';
+import { useState, useContext, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { User, Lock, LogIn, UserPlus, Sparkles } from 'lucide-react';
 import { GameContext } from '../context/GameContext';
@@ -14,9 +14,11 @@ export default function Login() {
   const [loading, setLoading] = useState(false);
 
   // If already authenticated, redirect straight to dashboard
-  if (user) {
-    setTimeout(() => navigate('/'), 100);
-  }
+  useEffect(() => {
+    if (user) {
+      navigate('/');
+    }
+  }, [user, navigate]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
