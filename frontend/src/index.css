@@ -664,6 +664,154 @@ body {
   .menu-btn {
     flex: 1 1 100%;
   }
+
+  /* Core adjustments */
+  body {
+    font-size: 14px;
+  }
+
+  .title {
+    font-size: 2.2rem !important;
+    margin-bottom: 1.2rem !important;
+    letter-spacing: 1px !important;
+  }
+
+  /* Game screens mobile optimization */
+  .game-container {
+    padding: 1.5rem 1rem !important;
+    margin: 1rem auto !important;
+    min-height: 80vh !important;
+  }
+
+  .back-btn {
+    width: 45px !important;
+    height: 45px !important;
+    top: 1rem !important;
+    left: 1rem !important;
+  }
+  
+  .back-btn svg {
+    width: 20px !important;
+    height: 20px !important;
+  }
+
+  .score-display {
+    font-size: 0.95rem !important;
+    padding: 0.5rem 1rem !important;
+    top: 1rem !important;
+    right: 1rem !important;
+    border-width: 2px !important;
+  }
+
+  .question-text {
+    font-size: 2.2rem !important;
+    padding: 1rem 1.5rem !important;
+    margin: 1.5rem auto !important;
+    border-width: 3px !important;
+    letter-spacing: 1px !important;
+    width: 100% !important;
+    text-align: center !important;
+    white-space: pre-wrap !important;
+    word-break: break-word !important;
+  }
+
+  .options-grid {
+    grid-template-columns: 1fr !important;
+    gap: 1rem !important;
+    margin-top: 1.5rem !important;
+  }
+
+  .option-btn {
+    font-size: 1.8rem !important;
+    padding: 1rem !important;
+    border-width: 3px !important;
+    border-radius: 18px !important;
+  }
+
+  /* Cards layout */
+  .card-grid {
+    gap: 1.2rem !important;
+    padding: 1rem 0 !important;
+    grid-template-columns: 1fr !important;
+  }
+
+  .game-card {
+    padding: 1.8rem 1.2rem !important;
+  }
+
+  /* Leaderboard responsive design */
+  .leaderboard-header-row,
+  .leaderboard-row {
+    grid-template-columns: 35px 1fr 85px 75px !important;
+    padding: 0.7rem 0.8rem !important;
+    font-size: 0.8rem !important;
+    gap: 5px !important;
+  }
+
+  .rank-badge {
+    width: 24px !important;
+    height: 24px !important;
+    font-size: 0.85rem !important;
+  }
+
+  /* Stats and layout grid */
+  .overview-stats {
+    grid-template-columns: 1fr !important;
+    gap: 1rem !important;
+  }
+
+  .stat-box {
+    padding: 1rem !important;
+  }
+
+  .stat-val {
+    font-size: 2rem !important;
+  }
+
+  /* Auth Screens */
+  .auth-card {
+    padding: 2rem 1.2rem !important;
+    gap: 1.5rem !important;
+  }
+
+  .auth-header h1 {
+    font-size: 1.8rem !important;
+  }
+
+  .auth-input-wrapper input {
+    font-size: 1rem !important;
+    padding: 0.8rem 0.8rem 0.8rem 2.8rem !important;
+  }
+
+  .auth-input-wrapper .input-icon {
+    left: 1rem !important;
+  }
+
+  .auth-submit-btn {
+    font-size: 1.15rem !important;
+    padding: 0.8rem !important;
+  }
+
+  /* Visual area blocks */
+  .block {
+    width: 35px !important;
+    height: 35px !important;
+    border-radius: 8px !important;
+  }
+
+  .coin {
+    width: 55px !important;
+    height: 55px !important;
+    font-size: 1.2rem !important;
+    border-width: 3px !important;
+  }
+
+  /* Feedback Overlay popup */
+  .feedback-overlay h1 {
+    font-size: 3rem !important;
+    text-align: center !important;
+    padding: 0 1rem !important;
+  }
 }
 
 /* Premium Hover & Active Navigation Styles */
