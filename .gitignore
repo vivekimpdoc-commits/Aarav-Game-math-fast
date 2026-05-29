@@ -1,0 +1,18 @@
+# Dependency directories
+node_modules/
+frontend/node_modules/
+backend/node_modules/
+
+# Production build artifacts
+frontend/dist/
+dist/
+
+# Local databases & environment
+backend/db/database.sqlite
+.env
+
+# System/IDE files
+.DS_Store
+.vscode/
+.idea/
+*.log
