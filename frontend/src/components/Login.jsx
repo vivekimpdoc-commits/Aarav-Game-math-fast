@@ -1,17 +1,12 @@
 import { useState, useContext, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { User, Lock, LogIn, UserPlus, Sparkles, Mail, Key } from 'lucide-react';
+import { Sparkles, Mail, Key } from 'lucide-react';
 import { GameContext } from '../context/GameContext';
 
 export default function Login() {
-  const { login, register, user, requestOtp, verifyOtp } = useContext(GameContext);
+  const { user, requestOtp, verifyOtp } = useContext(GameContext);
   const navigate = useNavigate();
 
-  const [isOtpMode, setIsOtpMode] = useState(true); // Default to OTP login
-  const [isLoginView, setIsLoginView] = useState(true);
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
-  
   // OTP state
   const [email, setEmail] = useState('');
   const [otpCode, setOtpCode] = useState('');
@@ -41,25 +36,6 @@ export default function Login() {
     }
     return () => clearInterval(interval);
   }, [timer]);
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setErrorMsg(null);
-    setLoading(true);
-
-    try {
-      if (isLoginView) {
-        await login(username, password);
-      } else {
-        await register(username, password);
-      }
-      navigate('/');
-    } catch (err) {
-      setErrorMsg(err.message);
-    } finally {
-      setLoading(false);
-    }
-  };
 
   const handleSendOtp = async (e) => {
     e.preventDefault();
@@ -105,60 +81,10 @@ export default function Login() {
           <div className="auth-icon-badge">
             <Sparkles style={{ width: '32px', height: '32px', color: 'var(--tertiary)' }} />
           </div>
-          <h1>{isOtpMode ? (otpSent ? 'Verify Email' : 'Email OTP Login') : (isLoginView ? 'Welcome Back!' : 'Create Account')}</h1>
+          <h1>{otpSent ? 'Verify Email' : 'Email OTP Login'}</h1>
           <p>
-            {isOtpMode 
-              ? (otpSent ? 'We sent a verification code to your email' : 'Sign in or sign up instantly with your email')
-              : (isLoginView ? 'Log in to continue your math journey' : 'Sign up to start saving your progress')}
+            {otpSent ? 'We sent a verification code to your email' : 'Sign in or sign up instantly with your email'}
           </p>
-        </div>
-
-        {/* Tab Selection */}
-        <div className="auth-tabs" style={{ display: 'flex', background: 'rgba(0,0,0,0.05)', borderRadius: '10px', padding: '5px', marginBottom: '1.5rem' }}>
-          <button 
-            type="button" 
-            style={{ 
-              flex: 1, 
-              padding: '8px', 
-              border: 'none', 
-              background: isOtpMode ? 'white' : 'transparent', 
-              color: isOtpMode ? 'var(--primary)' : 'var(--text-dark)', 
-              borderRadius: '8px', 
-              fontWeight: 'bold', 
-              cursor: 'pointer',
-              boxShadow: isOtpMode ? '0 2px 4px rgba(0,0,0,0.08)' : 'none',
-              transition: 'all 0.2s'
-            }}
-            onClick={() => {
-              setIsOtpMode(true);
-              setErrorMsg(null);
-              setDemoOtpAlert(null);
-            }}
-          >
-            Email OTP
-          </button>
-          <button 
-            type="button" 
-            style={{ 
-              flex: 1, 
-              padding: '8px', 
-              border: 'none', 
-              background: !isOtpMode ? 'white' : 'transparent', 
-              color: !isOtpMode ? 'var(--primary)' : 'var(--text-dark)', 
-              borderRadius: '8px', 
-              fontWeight: 'bold', 
-              cursor: 'pointer',
-              boxShadow: !isOtpMode ? '0 2px 4px rgba(0,0,0,0.08)' : 'none',
-              transition: 'all 0.2s'
-            }}
-            onClick={() => {
-              setIsOtpMode(false);
-              setErrorMsg(null);
-              setDemoOtpAlert(null);
-            }}
-          >
-            Password
-          </button>
         </div>
 
         {errorMsg && (
@@ -173,140 +99,75 @@ export default function Login() {
           </div>
         )}
 
-        {isOtpMode ? (
-          /* EMAIL OTP LOGIN FLOW */
-          !otpSent ? (
-            <form onSubmit={handleSendOtp} className="auth-form">
-              <div className="auth-input-group">
-                <label>Email Address</label>
-                <div className="auth-input-wrapper">
-                  <Mail className="input-icon" />
-                  <input 
-                    type="email" 
-                    placeholder="Enter your email" 
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    required
-                  />
-                </div>
+        {/* EMAIL OTP LOGIN FLOW */}
+        {!otpSent ? (
+          <form onSubmit={handleSendOtp} className="auth-form">
+            <div className="auth-input-group">
+              <label>Email Address</label>
+              <div className="auth-input-wrapper">
+                <Mail className="input-icon" />
+                <input 
+                  type="email" 
+                  placeholder="Enter your email" 
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  required
+                />
               </div>
+            </div>
 
-              <button type="submit" className="auth-submit-btn" disabled={loading}>
-                {loading ? 'Sending Code...' : 'Send Verification Code'}
-              </button>
-            </form>
-          ) : (
-            <form onSubmit={handleVerifyOtp} className="auth-form">
-              <div className="auth-input-group">
-                <label>Verification Code</label>
-                <div className="auth-input-wrapper">
-                  <Key className="input-icon" />
-                  <input 
-                    type="text" 
-                    placeholder="Enter 6-digit OTP" 
-                    value={otpCode}
-                    onChange={(e) => setOtpCode(e.target.value)}
-                    required
-                    maxLength={6}
-                    minLength={6}
-                    style={{ letterSpacing: '0.2em', textAlign: 'center', fontWeight: 'bold', fontSize: '1.15rem' }}
-                  />
-                </div>
+            <button type="submit" className="auth-submit-btn" disabled={loading}>
+              {loading ? 'Sending Code...' : 'Send Verification Code'}
+            </button>
+          </form>
+        ) : (
+          <form onSubmit={handleVerifyOtp} className="auth-form">
+            <div className="auth-input-group">
+              <label>Verification Code</label>
+              <div className="auth-input-wrapper">
+                <Key className="input-icon" />
+                <input 
+                  type="text" 
+                  placeholder="Enter 6-digit OTP" 
+                  value={otpCode}
+                  onChange={(e) => setOtpCode(e.target.value)}
+                  required
+                  maxLength={6}
+                  minLength={6}
+                  style={{ letterSpacing: '0.2em', textAlign: 'center', fontWeight: 'bold', fontSize: '1.15rem' }}
+                />
               </div>
+            </div>
 
-              <button type="submit" className="auth-submit-btn" disabled={loading}>
-                {loading ? 'Verifying...' : 'Verify & Login'}
-              </button>
+            <button type="submit" className="auth-submit-btn" disabled={loading}>
+              {loading ? 'Verifying...' : 'Verify & Login'}
+            </button>
 
-              <div style={{ textAlign: 'center', marginTop: '1.2rem', fontSize: '0.9rem', display: 'flex', flexDirection: 'column', gap: '8px' }}>
-                {timer > 0 ? (
-                  <span style={{ color: '#7f8c8d' }}>Resend code in {timer}s</span>
-                ) : (
-                  <button 
-                    type="button" 
-                    style={{ background: 'none', border: 'none', color: 'var(--primary)', fontWeight: 'bold', cursor: 'pointer', textDecoration: 'underline' }}
-                    onClick={handleSendOtp}
-                  >
-                    Resend Code
-                  </button>
-                )}
+            <div style={{ textAlign: 'center', marginTop: '1.2rem', fontSize: '0.9rem', display: 'flex', flexDirection: 'column', gap: '8px' }}>
+              {timer > 0 ? (
+                <span style={{ color: '#7f8c8d' }}>Resend code in {timer}s</span>
+              ) : (
                 <button 
                   type="button" 
-                  style={{ background: 'none', border: 'none', color: '#7f8c8d', fontSize: '0.85rem', cursor: 'pointer', marginTop: '4px' }}
-                  onClick={() => {
-                    setOtpSent(false);
-                    setOtpCode('');
-                    setDemoOtpAlert(null);
-                  }}
+                  style={{ background: 'none', border: 'none', color: 'var(--primary)', fontWeight: 'bold', cursor: 'pointer', textDecoration: 'underline' }}
+                  onClick={handleSendOtp}
                 >
-                  ← Use a different email
-                </button>
-              </div>
-            </form>
-          )
-        ) : (
-          /* TRADITIONAL USERNAME/PASSWORD FLOW */
-          <>
-            <form onSubmit={handleSubmit} className="auth-form">
-              <div className="auth-input-group">
-                <label>Username</label>
-                <div className="auth-input-wrapper">
-                  <User className="input-icon" />
-                  <input 
-                    type="text" 
-                    placeholder="Enter your username" 
-                    value={username}
-                    onChange={(e) => setUsername(e.target.value)}
-                    required
-                    minLength={3}
-                    maxLength={12}
-                  />
-                </div>
-              </div>
-
-              <div className="auth-input-group">
-                <label>Password</label>
-                <div className="auth-input-wrapper">
-                  <Lock className="input-icon" />
-                  <input 
-                    type="password" 
-                    placeholder="••••••••" 
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    required
-                    minLength={4}
-                  />
-                </div>
-              </div>
-
-              <button type="submit" className="auth-submit-btn" disabled={loading}>
-                {loading ? (
-                  'Processing...'
-                ) : (
-                  <>
-                    {isLoginView ? <LogIn className="btn-icon" /> : <UserPlus className="btn-icon" />}
-                    {isLoginView ? 'Sign In' : 'Sign Up'}
-                  </>
-                )}
-              </button>
-            </form>
-
-            <div className="auth-footer">
-              <span>{isLoginView ? "Don't have an account?" : "Already have an account?"}</span>
+                  Resend Code
+                  </button>
+              )}
               <button 
                 type="button" 
-                className="auth-toggle-view"
+                style={{ background: 'none', border: 'none', color: '#7f8c8d', fontSize: '0.85rem', cursor: 'pointer', marginTop: '4px' }}
                 onClick={() => {
-                  setIsLoginView(!isLoginView);
-                  setErrorMsg(null);
-                  setUsername('');
-                  setPassword('');
+                  setOtpSent(false);
+                  setOtpCode('');
+                  setDemoOtpAlert(null);
                 }}
               >
-                {isLoginView ? 'Register here' : 'Sign in here'}
+                ← Use a different email
               </button>
             </div>
-          </>
+          </form>
         )}
       </div>
     </div>
