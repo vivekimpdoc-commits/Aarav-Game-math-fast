@@ -121,7 +121,7 @@ export default function BossGame() {
 
   return (
     <div className="game-container glass-panel" style={{border: combo > 2 ? '3px solid var(--primary)' : '1px solid white'}}>
-      <div style={{display: 'flex', justifyContent: 'space-between', padding: '0 1rem'}}>
+      <div style={{display: 'flex', justifyContent: 'space-between', flexWrap: 'wrap', gap: '10px', padding: '0 1rem'}}>
          <div className="score-display" style={{position: 'static', background: 'var(--primary)', color: 'white'}}>
            <Timer /> {timeLeft}s
          </div>
