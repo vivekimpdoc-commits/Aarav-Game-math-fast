@@ -262,8 +262,82 @@ export function GameProvider({ children }) {
     });
   };
 
+  // OTP actions
+  const requestOtp = async (email) => {
+    try {
+      const res = await fetch('http://localhost:5000/api/auth/send-otp', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email })
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || 'Failed to send OTP');
+      return { success: true, demoOtp: data.demoOtp };
+    } catch (err) {
+      if (err.message.includes('Failed to fetch') || err.message.includes('NetworkError') || err.message === 'Failed to fetch') {
+        // Fallback to local demo mode!
+        const code = Math.floor(100000 + Math.random() * 900000).toString();
+        localStorage.setItem('math_demo_otp_' + email.trim().toLowerCase(), code);
+        return { success: true, demoOtp: code, isDemoMode: true };
+      }
+      throw err;
+    }
+  };
+
+  const verifyOtp = async (email, code) => {
+    try {
+      const res = await fetch('http://localhost:5000/api/auth/verify-otp', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, code })
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || 'Invalid OTP code');
+
+      setToken(data.token);
+      setUser(data.user);
+      setLevel(data.user.level);
+      setXp(data.user.xp);
+      localStorage.setItem('math_token', data.token);
+      localStorage.setItem('math_demo_user', JSON.stringify(data.user));
+      return data.user;
+    } catch (err) {
+      if (err.message.includes('Failed to fetch') || err.message.includes('NetworkError') || err.message === 'Failed to fetch' || err.message.includes('Demo Mode')) {
+        // Fallback to local demo mode!
+        const storedOtp = localStorage.getItem('math_demo_otp_' + email.trim().toLowerCase());
+        if (!storedOtp || storedOtp !== code.trim()) {
+          throw new Error('Incorrect OTP code (Demo Mode)');
+        }
+        
+        const users = JSON.parse(localStorage.getItem('math_demo_users') || '{}');
+        const cleanEmail = email.trim().toLowerCase();
+        let username = cleanEmail.split('@')[0].replace(/[^a-zA-Z0-9]/g, '').slice(0, 8) || 'player';
+        
+        let matchedUser = Object.values(users).find(u => u.email === cleanEmail);
+        if (!matchedUser) {
+          if (users[username.toLowerCase()]) {
+            username = username + Math.floor(100 + Math.random() * 900);
+          }
+          matchedUser = { username, email: cleanEmail, level: 1, xp: 0 };
+          users[username.toLowerCase()] = matchedUser;
+          localStorage.setItem('math_demo_users', JSON.stringify(users));
+        }
+
+        const demoToken = 'demo_' + Math.random().toString(36).substr(2, 9);
+        setToken(demoToken);
+        setUser(matchedUser);
+        setLevel(matchedUser.level);
+        setXp(matchedUser.xp);
+        localStorage.setItem('math_token', demoToken);
+        localStorage.setItem('math_demo_user', JSON.stringify(matchedUser));
+        return matchedUser;
+      }
+      throw err;
+    }
+  };
+
   return (
-    <GameContext.Provider value={{ level, xp, xpNeeded, addXp, showLevelUp, user, token, loading, login, register, logout }}>
+    <GameContext.Provider value={{ level, xp, xpNeeded, addXp, showLevelUp, user, token, loading, login, register, logout, requestOtp, verifyOtp }}>
       {children}
     </GameContext.Provider>
   );

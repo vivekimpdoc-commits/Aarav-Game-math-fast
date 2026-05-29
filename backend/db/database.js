@@ -22,9 +22,30 @@ const db = new sqlite3.Database(dbPath, (err) => {
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             username TEXT UNIQUE,
             password TEXT,
+            email TEXT,
             level INTEGER DEFAULT 1,
             xp INTEGER DEFAULT 0,
             timestamp DATETIME DEFAULT CURRENT_TIMESTAMP
+        )`, (err) => {
+            if (!err) {
+                // Try to add email column if the table already existed and lacks it
+                db.run(`ALTER TABLE users ADD COLUMN email TEXT`, (alterErr) => {
+                    if (alterErr) {
+                        if (!alterErr.message.includes('duplicate column name') && !alterErr.message.includes('already exists')) {
+                            console.warn('Note on users table schema update:', alterErr.message);
+                        }
+                    }
+                });
+            }
+        });
+
+        // Initialize OTPs table
+        db.run(`CREATE TABLE IF NOT EXISTS otps (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            email TEXT,
+            code TEXT,
+            expires_at DATETIME,
+            verified INTEGER DEFAULT 0
         )`);
     }
 });
